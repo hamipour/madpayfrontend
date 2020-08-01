@@ -9,12 +9,12 @@ import { PanelModule } from './panel/panel.module';
 @NgModule({
   declarations: [
     AppComponent,
-    LoginModule,
-    PanelModule
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    PanelModule,
+    LoginModule
   ],
   providers: [],
   bootstrap: [AppComponent]
