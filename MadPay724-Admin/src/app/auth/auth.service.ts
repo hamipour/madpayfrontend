@@ -2,22 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
+import { JwtHelperService } from '@auth0/angular-jwt';
 
-interface LoginCredentials{
+interface LoginCredentials {
   username: string;
   password: string;
   rememberMe: boolean;
 }
-interface SignupCredentials{
+interface SignupCredentials {
   username: string;
   password: string;
   passwordConfirmation: string;
 }
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
   baseUrl = 'http://localhost:25865/site/admin/auth/';
+   jwtHelper = new JwtHelperService();
 
   constructor(private httpClietn: HttpClient) {}
 
@@ -41,5 +43,10 @@ export class AuthService {
         }
       })
     );
+  }
+
+  loggedIn() {
+    const token = localStorage.getItem('token');
+    return !this.jwtHelper.isTokenExpired(token);
   }
 }

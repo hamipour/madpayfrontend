@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl } from '@angular/forms';
 import { AuthService } from '../auth.service';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-login',
@@ -14,17 +15,27 @@ export class LoginComponent implements OnInit {
     password: new FormControl(''),
   });
 
-  constructor(private authService: AuthService, private router: Router) {}
+  returnUrl = '';
 
-  ngOnInit(): void {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private alertService: ToastrService,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit() {
+    this.route.queryParams.subscribe(params => this.returnUrl = params['return'] || '/panel');
+  }
 
   login() {
     return this.authService.login(this.authForm.value).subscribe(
       (next) => {
-        this.router.navigate(['']);
+        this.alertService.success('ورود با موفقیت انجام شد.');
+        this.router.navigate([this.returnUrl]);
       },
       (error) => {
-        console.log(error);
+        this.alertService.error('خطا در احراز هویت', 'خطا');
       }
     );
   }
